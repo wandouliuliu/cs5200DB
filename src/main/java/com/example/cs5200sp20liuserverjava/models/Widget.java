@@ -77,13 +77,13 @@ public class Widget {
         this.widgetId = id;
         this.dType=dtype;
         this.pageId=page_id;
+        this.widgetName=name;
         this.cssClass = css_class;
         this.cssStyle = css_style;
         this.text = text;
         this.width = width;
         this.height = height;
         this.order = order;
-        this.pageId = page_id;
 
     }
 
@@ -109,8 +109,8 @@ public class Widget {
     public String getWidgetName() {
         return widgetName;
     }
-    public void setWidgetName(String widgetName) {
-        this.widgetName = widgetName;
+    public void setWidgetName(String name) {
+        this.widgetName = name;
     }
     public String getCssClass() {
         return cssClass;

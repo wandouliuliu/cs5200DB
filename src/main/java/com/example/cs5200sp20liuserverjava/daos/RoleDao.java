@@ -218,4 +218,50 @@ public class RoleDao implements RoleImpl {
 
     }
 
+
+    public void deleteWebsiteRole( int websiteId) {
+        try {
+            Connection connection = null;
+            try {
+                connection = DBConnection.getConnection();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            String deleteWebsiteRole="Delete from website_role" +
+                    " where website_id=? ;\r\n" ;
+
+            System.out.println(deleteWebsiteRole);
+            PreparedStatement pStatement = connection.prepareStatement(deleteWebsiteRole);
+            pStatement.setInt(1,websiteId);
+
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void deletePageRole(int pageId) {
+        try {
+            Connection connection = DBConnection.getConnection();
+
+            String deletePageRole="Delete from page_role" +
+                    " where page_id=?;\r\n" ;
+
+            System.out.println(deletePageRole);
+            PreparedStatement pStatement = connection.prepareStatement(deletePageRole);
+            pStatement.setInt(1,pageId);
+
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

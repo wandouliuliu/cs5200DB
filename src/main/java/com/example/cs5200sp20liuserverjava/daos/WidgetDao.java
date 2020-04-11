@@ -54,7 +54,7 @@ public class WidgetDao implements WidgetImpl{
             Statement s2 = connection.createStatement();
             String sql1 = "Insert into widget VALUES" +
                     "("+id+"," + "\""+page_Id+"\"," + "\""+DTYPE+"\"," +
-                    "\""+name +"\"," + "\""+width+"\"," +
+                    "\""+name+"\"," + "\""+width+"\"," +
                     "\""+height+"\"," + "\""+css_class+"\","+"\""+css_style+"\","+"\""+text+"\","+"\""+order+"\");" ;
             System.out.println(sql1);
             s1.executeUpdate(sql1);
@@ -202,11 +202,11 @@ public class WidgetDao implements WidgetImpl{
     }
 
     @Override
-    public int updateWidget(int widgetId, Widget widget) {
+    public int updateWidget(int page_Id, Widget widget) {
         try {
             Connection connection = DBConnection.getConnection();
-            String updateWidget= "Update widget" +
-                    "`page_Id`=\""+widget.getPageId()+"\"," +
+            String updateWidget= "Update widget set" +
+                    "`id`=\""+widget.getWidgetId()+"\"," +
                     "`DTYPE`=\""+widget.getdType()+"\"," +
                     "`name`=\""+widget.getWidgetName()+"\"," +
                     "`width`=\""+widget.getWidth()+"\"," +
@@ -214,11 +214,11 @@ public class WidgetDao implements WidgetImpl{
                     "`css_class`=\""+widget.getCssClass()+"\"," +
                     "`css_style`=\""+widget.getCssStyle()+"\"," +
                     "`text`=\""+widget.getText()+"\"," +
-                    "orde=\""+widget.getOrder()+"\""+
-                    "where page_Id=?;" ;
+                    "`order`=\""+widget.getOrder()+"\""+
+                    "where widget.id=?;" ;
             System.out.println(updateWidget);
             PreparedStatement pStatement = connection.prepareStatement(updateWidget);
-            pStatement.setInt(1,widgetId);
+            pStatement.setInt(1,page_Id);
             pStatement.executeUpdate();
             return 1;
         } catch (SQLException e) {
@@ -233,7 +233,7 @@ public class WidgetDao implements WidgetImpl{
     public int deleteWidget(int widgetId) {
         try {
             Connection connection = DBConnection.getConnection();
-            String deleteDeveloper="Delete widget from " +
+            String deleteDeveloper="Delete widget from widget" +
                     " where id=?;" ;
             System.out.println(deleteDeveloper);
             PreparedStatement pStatement = connection.prepareStatement(deleteDeveloper);

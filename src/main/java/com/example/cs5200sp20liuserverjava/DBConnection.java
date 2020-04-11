@@ -1,7 +1,6 @@
 package com.example.cs5200sp20liuserverjava;
 
 import java.sql.*;
-
 public class DBConnection {
 
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";

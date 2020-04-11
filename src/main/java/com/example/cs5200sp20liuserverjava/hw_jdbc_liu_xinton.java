@@ -69,16 +69,16 @@ public class hw_jdbc_liu_xinton {
 
 
         WidgetDao widgetDao = WidgetDao.getInstance();
-        Widget widget1=new Widget(123, "head123", "Welcome",0, 0, 0,"null", 123,"heading");
-        Widget widget2=new Widget(234, "post234", "<p>Lorem</p>",0, 0, 0, null, 234,"html");
-        Widget widget3=new Widget(345, "head345", "Hi",0, 0, 1,null, 345,"heading");
-        Widget widget4=new Widget(456, "intro456", "<h1>Hi</h1>",0, 0, 2,null, 345,"html");
-        Widget widget5=new Widget(567, "image 345", null,50, 100, 3,"/img/567.png", 345,"image");
-        Widget widget6=new Widget(678, "video 456", null,400, 300, 0, "https://youtu.be/h67VX51QXiQ", 456,"youtube");
+        Widget widget1=new Widget(1, "head123", "Welcome",0, 0, 0,"null", 123,"heading");
+        Widget widget2=new Widget(2, "post234", "<p>Lorem</p>",0, 0, 0, null, 234,"html");
+        Widget widget3=new Widget(3, "head345", "Hi",0, 0, 1,null, 345,"heading");
+        Widget widget4=new Widget(4, "intro456", "<h1>Hi</h1>",0, 0, 2,null, 345,"html");
+        Widget widget5=new Widget(5, "image 345", null,50, 100, 3,"/img/567.png", 345,"image");
+        Widget widget6=new Widget(6, "video 456", null,400, 300, 0, "https://youtu.be/h67VX51QXiQ", 456,"youtube");
         widgetDao.createWidgetForPage(123, widget1);
         widgetDao.createWidgetForPage(234, widget2);
         widgetDao.createWidgetForPage(345, widget3);
-        widgetDao.createWidgetForPage(345, widget4);
+        widgetDao.createWidgetForPage(456, widget4);
         widgetDao.createWidgetForPage(345, widget5);
         widgetDao.createWidgetForPage(456, widget6);
 
@@ -121,91 +121,88 @@ public class hw_jdbc_liu_xinton {
 
 
         //###############################update######################################
-        Developer p=new Developer(12, "alice","alice","Alice","Woder","alice@wonder.com","4321rewq","3334445555");
-        developerDao.updateDeveloper(12,p);
+
+        //Update developer - Update Charlie's primary phone number to 333-444-5555
+        Developer p=new Developer(34, "charlie","charlie","Charles","Garcia","chuch@garcia.com","6543ytre","3334445555");
+        developerDao.updateDeveloper(34,p);
 
 
-        int pageHeadId = 345;
-
-        Collection <Widget> orderWidget = widgetDao.findWidgetsForPage(pageHeadId);
+        //Update widget - Update the relative order of widget head345 on the page so that it's new order is 3. Note that the other widget's order needs to update as well
+        Collection <Widget> orderWidget = widgetDao.findAllWidgets();
         for(Widget wid : orderWidget)
         {
-            int widId = wid.getPageId();
-            wid.setOrder(((wid.getOrder()+1)%3)+1);
-            widgetDao.updateWidget(widId, wid);
+
+            int widId = wid.getWidgetId();
+            wid.setOrder(wid.getOrder()+2);
+            widgetDao.updateWidget(widId,wid);
         }
 
-        websiteDao.deleteWebsite(CNET.getWebsiteId());
+        //Update page - Append 'CNET - ' to the beginning of all CNET's page titles
+
         Collection<Page> pages = pageDao.findAllPages();
         for(Page page: pages){
-            if (page.getPageId()==CNET.getWebsiteId()){
+            if (page.getTitle().equals("Home")||page.getTitle().equals("Profile")){
                 page.setTitle("CNET"+page.getTitle());
-                System.out.println("CNET"+page.getTitle());
-                pageDao.updatePage(CNET.getWebsiteId(),page);
+                pageDao.updatePage(page.getPageId(),page);
+
             }
         }
 
 
+       // Update roles - Swap Charlie's and Bob's role in CNET's Home page
+
         int pageID=0;
-       System.out.println( Home.getPageId());
+        pageID =Home.getPageId();
 
-     //   System.out.println(777777777);
-//        pageID =Home.getPageId();
+        roleDao.deletePageRole(34,pageID,3);
+        roleDao.deletePageRole(23, pageID, 5);
 
-        roleDao.deletePageRole(2,pageID,5);
-        roleDao.deletePageRole(3, pageID, 3);
-
-        roleDao.assignPageRole(2, pageID, 3);
-        roleDao.assignPageRole(3, pageID, 5);
+        roleDao.assignPageRole(34, pageID, 5);
+        roleDao.assignPageRole(23, pageID, 3);
 
 
 //################################################delete###############################################################
+
+        //Delete developer - Delete Alice's primary address
         Developer d=new Developer(12, "alice","alice","Alice","Woder","alice@wonder.com","4321rewq","null");
         developerDao.updateDeveloper(12,d);
-
-        pageDao.deletePage(Wikipedia.getWebsiteId());
-//        System.out.println(Wikipedia.getWebsiteId());
-//        System.out.println(developerDao);
-//        System.out.println(999999999);
-        System.out.println(Contact.getPageId());
-        int pageId3=Contact.getPageId();
-        Collection <Widget> lastWidget = widgetDao.findWidgetsForPage(pageId3);
-        int lastOr = 0;
-        int lastId = 0;
-        System.out.println(lastWidget);
-        for(Widget w : lastWidget)
+//
+        //Delete widget - Remove the last widget in the Contact page. The last widget is the one with the highest value in the order field
+        Collection <Widget> deleteWidget = widgetDao.findAllWidgets();
+        int order=0;
+        int w=0;
+        for(Widget wid : deleteWidget)
         {
-            System.out.println(w.getOrder());
-            int or = w.getOrder();
-
-            if (or > lastOr)
-            {
-                lastId = w.getPageId();
-                lastOr = or;
-             //   System.out.println(77777);
-                System.out.println(lastId);
+            if(wid.getOrder()>order){
+                order=wid.getOrder();
+                w=wid.getWidgetId();
             }
         }
-        //System.out.println(9999999);
-        //System.out.println(lastId);
+        widgetDao.deleteWidget(w);
 
-        widgetDao.deleteWidget(lastId);
-
-        Collection <Page> lastPage = pageDao.findPagesForWebsite(Wikipedia.getWebsiteId());
-
-        Date lastUpdate = new Date(0);
-        int lastPageId = 0;
-        for(Page c : lastPage)
-        {
-            Date update = (Date) c.getUpdatedDate();
-
-            if(update.after(lastUpdate))
-            {  lastUpdate = update;
-                lastPageId = c.getPageId();
+        //Delete page - Remove the last updated page in Wikipedia
+        Collection <Page> deletepage = pageDao.findAllPages();
+        for(Page page: deletepage){
+            if(page.getPageId()==345){
+                pageDao.deletePage(page.getPageId());
             }
         }
 
-        pageDao.deletePage(lastPageId);
+        //Delete website - Remove the CNET web site, as well as all related roles and privileges relating developers to the Website and Pages
+        System.out.println(CNET.getWebsiteId());
+        websiteDao.deleteWebsite(CNET.getWebsiteId());
+        for(int i=1;i<=5;i++){
+            roleDao.deletePageRole(12,CNET.getWebsiteId(),i);
+            roleDao.deletePageRole(23,CNET.getWebsiteId(),i);
+            roleDao.deletePageRole(34,CNET.getWebsiteId(),i);
+            roleDao.deletePageRole(45,CNET.getWebsiteId(),i);
+            roleDao.deletePageRole(56,CNET.getWebsiteId(),i);
+            roleDao.deleteWebsiteRole(12,CNET.getWebsiteId(),i);
+            roleDao.deleteWebsiteRole(23,CNET.getWebsiteId(),i);
+            roleDao.deleteWebsiteRole(34,CNET.getWebsiteId(),i);
+            roleDao.deleteWebsiteRole(45,CNET.getWebsiteId(),i);
+            roleDao.deleteWebsiteRole(56,CNET.getWebsiteId(),i);
+        }
 
 
 

@@ -184,13 +184,12 @@ public class PageDao implements PageImpl{
         try {
             Connection connection = DBConnection.getConnection();
             String updatePage= "Update page set " +
-                    "`id`=\""+page.getWebsiteId()+"\"," +
+                    "`id`=\""+page.getPageId()+"\"," +
                     "`title`=\""+page.getTitle()+"\"," +
                     "`description`=\""+page.getDescription()+"\"," +
                     "`created`=\""+page.getCreatedDate()+"\"," +
                     "`updated`=\""+page.getUpdatedDate()+"\"," +
-                    "`views`=\""+page.getViews()+"\"," +
-                    "`webId`=\""+page.getWebsiteId()+"\""+
+                    "`views`=\""+page.getViews()+"\"" +
                     "where page.id=?;" ;
 
             System.out.println(updatePage);
